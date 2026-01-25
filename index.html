@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title> 连连看 - 纯H5版 </title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: "Microsoft YaHei", Arial, sans-serif;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        #gameContainer {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            max-width: 600px;
+            max-height: 900px;
+            background: #fff;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.3);
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.95);
+            z-index: 10;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        h1 {
+            font-size: 48px;
+            color: #667eea;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 10px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .level-select {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px;
+            max-width: 400px;
+        }
+
+        .level-btn {
+            padding: 20px;
+            font-size: 18px;
+            background: white;
+            color: #667eea;
+            border: 3px solid #667eea;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .level-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .level-btn.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        #gameInfo {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            display: flex;
+            justify-content: space-between;
+            color: #333;
+            font-size: 18px;
+            font-weight: bold;
+            z-index: 5;
+            background: rgba(255,255,255,0.9);
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .message {
+            font-size: 24px;
+            color: #333;
+            margin: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <canvas id="gameCanvas"></canvas>
+        
+        <!-- Start Screen -->
+        <div id="startScreen" class="screen">
+            <h1>🎮 连连看</h1>
+            <button class="btn" onclick="game.showLevelSelect()">开始游戏</button>
+        </div>
+
+        <!-- Level Select Screen -->
+        <div id="levelScreen" class="screen hidden">
+            <h1>选择关卡</h1>
+            <div class="level-select" id="levelSelect"></div>
+            <button class="btn" onclick="game.showStart()">返回</button>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="gameoverScreen" class="screen hidden">
+            <h1 id="gameoverTitle">游戏结束</h1>
+            <p class="message" id="gameoverMessage"></p>
+            <div>
+                <button class="btn" onclick="game.retry()">再试一次</button>
+                <button class="btn" onclick="game.nextLevel()">下一关</button>
+                <button class="btn" onclick="game.showLevelSelect()">选择关卡</button>
+            </div>
+        </div>
+
+        <!-- Game Info -->
+        <div id="gameInfo" class="hidden">
+            <div class="info-item">
+                <span>⏱️</span>
+                <span id="timeDisplay">0</span>
+            </div>
+            <div class="info-item">
+                <span>🎯 关卡</span>
+                <span id="levelDisplay">1</span>
+            </div>
+            <div class="info-item">
+                <span>💣</span>
+                <span id="bombDisplay">3</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
