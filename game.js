@@ -140,11 +140,6 @@ class LinkGame {
             tiles.push(type, type);
         }
         
-        // 如果是奇数个格子，添加一个空格
-        if (totalTiles % 2 === 1) {
-            tiles.push(null);
-        }
-        
         // 洗牌
         for (let i = tiles.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -155,10 +150,18 @@ class LinkGame {
         let index = 0;
         for (let row = 0; row < this.rows; row++) {
             for (let col = 0; col < this.cols; col++) {
-                this.board[row][col] = {
-                    type: tiles[index++],
-                    matched: false
-                };
+                if (index < tiles.length) {
+                    this.board[row][col] = {
+                        type: tiles[index++],
+                        matched: false
+                    };
+                } else {
+                    // 如果是奇数格子，最后一个设为已匹配（不显示）
+                    this.board[row][col] = {
+                        type: null,
+                        matched: true
+                    };
+                }
             }
         }
         
