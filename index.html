@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title> 连连看 - 纯H5版 </title>
+    <title>连连看 - 纯H5版</title>
     <style>
         * {
             margin: 0;
@@ -151,20 +151,20 @@
     <div id="gameContainer">
         <canvas id="gameCanvas"></canvas>
         
-        <!-- Start Screen -->
+        <!-- 开始屏幕 -->
         <div id="startScreen" class="screen">
             <h1>🎮 连连看</h1>
             <button class="btn" onclick="game.showLevelSelect()">开始游戏</button>
         </div>
 
-        <!-- Level Select Screen -->
+        <!-- 关卡选择屏幕 -->
         <div id="levelScreen" class="screen hidden">
             <h1>选择关卡</h1>
             <div class="level-select" id="levelSelect"></div>
             <button class="btn" onclick="game.showStart()">返回</button>
         </div>
 
-        <!-- Game Over Screen -->
+        <!-- 游戏结束屏幕 -->
         <div id="gameoverScreen" class="screen hidden">
             <h1 id="gameoverTitle">游戏结束</h1>
             <p class="message" id="gameoverMessage"></p>
@@ -175,7 +175,7 @@
             </div>
         </div>
 
-        <!-- Game Info -->
+        <!-- 游戏信息 -->
         <div id="gameInfo" class="hidden">
             <div class="info-item">
                 <span>⏱️</span>
@@ -185,7 +185,10 @@
                 <span>🎯 关卡</span>
                 <span id="levelDisplay">1</span>
             </div>
-            <div class="info-item">
+            <div class="info-item" id="bombBtn" style="cursor: pointer; transition: transform 0.2s;" 
+                 onmouseover="this.style.transform='scale(1.1)'" 
+                 onmouseout="this.style.transform='scale(1)'"
+                 title="点击使用炸弹消除任意一对图块">
                 <span>💣</span>
                 <span id="bombDisplay">3</span>
             </div>
