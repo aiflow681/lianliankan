@@ -14,6 +14,7 @@ class LinkGame {
         this.score = 0;
         this.isPlaying = false;
         this.isPaused = false;
+        this.bombMode = false; // 炸弹模式
         
         // 游戏板
         this.rows = 8;
@@ -32,6 +33,9 @@ class LinkGame {
         // 事件监听
         this.canvas.addEventListener('click', (e) => this.handleClick(e));
         window.addEventListener('resize', () => this.resizeCanvas());
+        
+        // 炸弹按钮
+        document.getElementById('bombBtn').addEventListener('click', () => this.useBomb());
         
         // 初始化关卡选择
         this.initLevelSelect();
@@ -96,6 +100,7 @@ class LinkGame {
         this.bombs = 3;
         this.isPlaying = true;
         this.isPaused = false;
+        this.bombMode = false; // 重置炸弹模式
         
         // 根据关卡调整难度
         this.rows = 6 + Math.floor(level / 3);
@@ -241,6 +246,20 @@ class LinkGame {
         const tile = this.board[row][col];
         if (!tile.type || tile.matched) return;
         
+        // 炸弹模式：直接消除点击的图块
+        if (this.bombMode) {
+            tile.matched = true;
+            this.bombMode = false;
+            document.getElementById('bombBtn').style.background = '';
+            this.draw();
+            
+            // 检查是否完成
+            if (this.checkWin()) {
+                this.gameOver(true);
+            }
+            return;
+        }
+        
         // 如果没有选中的图块
         if (!this.selectedTile) {
             this.selectedTile = { row, col };
@@ -275,6 +294,20 @@ class LinkGame {
             this.selectedTile = { row, col };
             this.draw();
         }
+    }
+    
+    useBomb() {
+        if (!this.isPlaying || this.isPaused || this.bombs <= 0) return;
+        
+        this.bombs--;
+        document.getElementById('bombDisplay').textContent = this.bombs;
+        
+        // 进入炸弹模式
+        this.bombMode = true;
+        document.getElementById('bombBtn').style.background = 'rgba(255, 215, 0, 0.3)';
+        
+        // 提示用户点击要消除的图块
+        alert('炸弹已激活！点击任意图块消除它');
     }
     
     canConnect(pos1, pos2) {
